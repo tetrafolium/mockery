@@ -31,12 +31,14 @@ func (this *Walker) doWalk(dir string, visitor WalkerVisitor) (generated bool) {
 		return
 	}
 
+	fmt.Printf("// [TRACE] doWalk() + dir=<%s>\n", dir)
 	for _, file := range files {
 		if strings.HasPrefix(file.Name(), ".") {
 			continue
 		}
 
 		path := filepath.Join(dir, file.Name())
+		fmt.Printf("// [TRACE] doWalk() ++ path=<%s>\n", path)
 
 		if file.IsDir() {
 			if this.Recursive {
@@ -61,8 +63,10 @@ func (this *Walker) doWalk(dir string, visitor WalkerVisitor) (generated bool) {
 		}
 		for _, iface := range p.Interfaces() {
 			if !this.Filter.MatchString(iface.Name) {
+				fmt.Printf("// [TRACE] doWalk() +++ SKIP iface.Name=<%s>\n", iface.Name)
 				continue
 			}
+			fmt.Printf("// [TRACE] doWalk() +++ VISIT iface.Name=<%s>\n", iface.Name)
 			err := visitor.VisitWalk(iface)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "Error walking %s: %s\n", iface.Name, err)

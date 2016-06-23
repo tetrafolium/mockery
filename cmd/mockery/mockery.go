@@ -72,6 +72,7 @@ func main() {
 		Note:      config.fNote,
 		Osp:       osp,
 	}
+	fmt.Printf("// [TRACE] visitor = <%#v>\n", visitor)
 
 	walker := mockery.Walker{
 		BaseDir:   config.fDir,
@@ -79,10 +80,11 @@ func main() {
 		Filter:    filter,
 		LimitOne:  limitOne,
 	}
+	fmt.Printf("// [TRACE] walker = <%#v>\n", walker)
 	generated := walker.Walk(visitor)
 
 	if config.fName != "" && !generated {
-		fmt.Printf("Unable to find %s in any go files under this path\n", config.fName)
+		fmt.Printf("## Unable to find %s in any go files under this path\n", config.fName)
 		os.Exit(1)
 	}
 }
