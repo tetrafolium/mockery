@@ -38,7 +38,6 @@ func (this *Walker) doWalk(dir string, visitor WalkerVisitor) (generated bool) {
 		}
 
 		path := filepath.Join(dir, file.Name())
-		fmt.Printf("// [TRACE] doWalk() ++ path=<%s>\n", path)
 
 		if file.IsDir() {
 			if this.Recursive {
@@ -56,9 +55,11 @@ func (this *Walker) doWalk(dir string, visitor WalkerVisitor) (generated bool) {
 
 		p := NewParser()
 
+		fmt.Printf("// [TRACE] doWalk() ++ path=<%s>\n", path)
 		err = p.Parse(path)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Error parsing file: ", err)
+			fmt.Printf("// [ERROR] doWalk(%s) -> p.Parse(%s) -> err=<%#v>\n", dir, path, err)
 			continue
 		}
 		for _, iface := range p.Interfaces() {

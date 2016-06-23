@@ -1,6 +1,7 @@
 package mockery
 
 import (
+	"fmt"
 	"go/ast"
 	"go/importer"
 	"go/types"
@@ -26,6 +27,7 @@ func (p *Parser) Parse(path string) error {
 
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
+		fmt.Printf("// [ERROR] Parse(%s) -> ioutil.ReadDir(%#v) -> err=<%#v>\n", path, dir, err)
 		return err
 	}
 
@@ -44,6 +46,7 @@ func (p *Parser) Parse(path string) error {
 		fpath := filepath.Join(dir, fi.Name())
 		f, err := conf.ParseFile(fpath, nil)
 		if err != nil {
+			fmt.Printf("// [ERROR] Parse(%s) -> conf.ParseFile(%#v) -> err=<%#v>\n", path, fpath, err)
 			return err
 		}
 
@@ -56,6 +59,7 @@ func (p *Parser) Parse(path string) error {
 
 	abs, err := filepath.Abs(path)
 	if err != nil {
+		fmt.Printf("// [ERROR] Parse(%s) -> filepath.Abs(%#v) -> err=<%#v>\n", path, path, err)
 		return err
 	}
 
@@ -66,6 +70,7 @@ func (p *Parser) Parse(path string) error {
 
 	prog, err := conf.Load()
 	if err != nil {
+		fmt.Printf("// [ERROR] Parse(%s) -> conf.Load() -> err=<%#v>\n", path, err)
 		return err
 	} else if len(prog.Created) != 1 {
 		panic("expected only one Created package")
